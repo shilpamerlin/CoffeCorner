@@ -10,11 +10,11 @@ import UIKit
 
 class AddCoffeOrderViewModel: ObservableObject {
     
-   
+    var coreDataObj = CoreDataStorage()
+    var customerName: String?
     var coffeDataModel = Coffee()
     var result: [Coffee]?
     var selectedItem: CoffeCellModel?
-    
     private var cellViewModel = [CoffeCellModel]() {
         didSet {
             reloadTableViewClosure()
@@ -23,28 +23,26 @@ class AddCoffeOrderViewModel: ObservableObject {
     var numberOfCellModel: Int {
         return cellViewModel.count
     }
-    func getCellAtRow(indexPath: IndexPath) -> CoffeCellModel {
-        return cellViewModel[indexPath.row]
-    }
     var total: Double {
         return calculateTotalPrice()
     }
     var reloadTableViewClosure: (() -> Void) = {}
-    
     @Published var size: String = ""
     @Published var coffeName: String = ""
-
+    
+    func getCellAtRow(indexPath: IndexPath) -> CoffeCellModel {
+        return cellViewModel[indexPath.row]
+    }
+   
     func getData() {
          result = coffeDataModel.addCoffee()
-        print("result is \(result)")
         processFetchedData(coffeList: result!)
     }
+    
     func processFetchedData(coffeList: [Coffee]){
         var cellModel = [CoffeCellModel]()
         for item in coffeList {
-           // print("item is \(item)")
             cellModel.append(createCellViewModel(coffeeList: item))
-            
         }
         self.cellViewModel = cellModel
     }
@@ -62,7 +60,6 @@ class AddCoffeOrderViewModel: ObservableObject {
     }
     
     func calculateTotalPrice() -> Double {
-    
     let coffeViewModel = result!.first(where: { $0.name == coffeName})
         if let coffeViewModel = coffeViewModel {
             print(coffeViewModel.price! * priceForSize())
@@ -77,9 +74,21 @@ class AddCoffeOrderViewModel: ObservableObject {
         selectedItem = cellViewModel[indexPath.row]
         coffeName = selectedItem!.name
     }
+    
     func selectedSize(selectedSize: String) {
         size = selectedSize
     }
+    
+    func retrieveOrders() -> [Order] {
+        
+        let retrievedData = coreDataObj.fetchData()
+        return retrievedData
+    }
+    
+    func saveOrder() {
+        coreDataObj.saveToCoredata(name: selectedItem!.name, custName: customerName!, size: size)
+    }
+   
 }
 
 struct CoffeCellModel {

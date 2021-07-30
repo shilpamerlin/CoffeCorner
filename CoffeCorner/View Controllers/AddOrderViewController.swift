@@ -16,22 +16,13 @@ class AddOrderViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-       
-        coffeeListsTblView.dataSource = self
-        coffeeListsTblView.delegate = self
-        
+        coffeeListsTblView?.dataSource = self
+        coffeeListsTblView?.delegate = self
         coffeViewModel.reloadTableViewClosure = { [weak self] () in
             DispatchQueue.main.async {
-                self?.coffeeListsTblView.reloadData()
+                self?.coffeeListsTblView?.reloadData()
             }
-            
         }
-        
-       // print(Coffee.allCoffeeTypes())
-     //setupUI()
-       // var vm = AddCoffeOrderViewModel()
-       // print(coffeViewModel.coffeList)
-       // var price = coffeViewModel.total
         coffeViewModel.getData()
     }
     
@@ -43,10 +34,10 @@ class AddOrderViewController: UIViewController {
         priceLbl.text = "$" + String(roundedValue)
     }
     
-
     @IBAction func placeOrderBtn(_ sender: Any) {
-        //let re = coffeViewModel.calculateTotalPrice()
-        //print("Total amount is \(re)")
+        coffeViewModel.customerName = customerName.text
+        coffeViewModel.saveOrder()
+        self.navigationController?.popViewController(animated: true)
     }
 }
 
@@ -60,6 +51,7 @@ extension AddOrderViewController: UITableViewDelegate,UITableViewDataSource {
         let info = coffeViewModel.getCellAtRow(indexPath: indexPath)
         cell.coffeeName?.text = info.name
         cell.coffeImage?.image = UIImage(named: info.image)
+        cell.tintColor = UIColor.brown
         return cell
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -67,13 +59,15 @@ extension AddOrderViewController: UITableViewDelegate,UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        
+        if tableView.cellForRow(at: indexPath)?.accessoryType == UITableViewCell.AccessoryType.checkmark {
+            tableView.cellForRow(at: indexPath)?.accessoryType = UITableViewCell.AccessoryType.none
+        } else {
+            tableView.cellForRow(at: indexPath)?.accessoryType = UITableViewCell.AccessoryType.checkmark
+            
+        }
         self.coffeViewModel.selectedRow(indexPath: indexPath)
         return indexPath
     }
-    
-  
-       
-        
-    
     
 }
