@@ -36,7 +36,7 @@ class AddCoffeOrderViewModel: ObservableObject {
    
     func getData() {
          result = coffeDataModel.addCoffee()
-        processFetchedData(coffeList: result!)
+         processFetchedData(coffeList: result!)
     }
     
     func processFetchedData(coffeList: [Coffee]){
@@ -51,6 +51,7 @@ class AddCoffeOrderViewModel: ObservableObject {
         return CoffeCellModel(name: coffeeList.name!, image: coffeeList.imageURL!, price: coffeeList.price!)
     }
     
+    //MARK: - Method shows prices for different coffee size
     private func priceForSize() -> Double {
         let prices = ["Small": 2.0, "Medium": 3.0, "Large": 4.0]
         guard let price = prices[self.size] else {
@@ -59,6 +60,7 @@ class AddCoffeOrderViewModel: ObservableObject {
         return price
     }
     
+    //MARK: - Method to calculate coffee price based on size choosen
     func calculateTotalPrice() -> Double {
     let coffeViewModel = result!.first(where: { $0.name == coffeName})
         if let coffeViewModel = coffeViewModel {
@@ -80,7 +82,6 @@ class AddCoffeOrderViewModel: ObservableObject {
     }
     
     func retrieveOrders() -> [Order] {
-        
         let retrievedData = coreDataObj.fetchData()
         return retrievedData
     }

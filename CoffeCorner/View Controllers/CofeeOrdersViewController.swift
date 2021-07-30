@@ -22,7 +22,7 @@ class CofeeOrdersViewController: UIViewController {
         title = "Coffee Orders"
         navigationController?.navigationBar.prefersLargeTitles = true
     }
-    
+    //MARK: - Reloading tableview with newly created order
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         orderListViewModel.getAllCoffeOrdersdata()
@@ -38,6 +38,7 @@ class CofeeOrdersViewController: UIViewController {
     }
 }
 
+//MARK: - Tableview methods
 extension CofeeOrdersViewController: UITableViewDelegate,UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return orderListViewModel.numberOfCellOrders
@@ -55,6 +56,7 @@ extension CofeeOrdersViewController: UITableViewDelegate,UITableViewDataSource {
         return 100
     }
     
+    //MARK: - Tableview method to delete completed order while trailingswipe
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let action = UIContextualAction(style: .destructive, title: "Completed") { (action, view, completionHandler) in
             self.orderListViewModel.deleteCompletedOrder(indexpath: indexPath)

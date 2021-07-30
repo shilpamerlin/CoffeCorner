@@ -13,6 +13,7 @@ class CoreDataStorage: NSManagedObject {
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var order: [Order]?
     
+    //MARK:- Method to store order details to Core Data
     func saveToCoredata(name: String, custName: String, size: String){
         let newOrder = Order(context: self.context)
         newOrder.id = UUID()
@@ -28,6 +29,7 @@ class CoreDataStorage: NSManagedObject {
         }
     }
     
+    //MARK:- Method to retrieve data from Core Data
     func fetchData() -> [Order] {
         do {
             let request = Order.fetchRequest() as NSFetchRequest <Order>
@@ -40,6 +42,7 @@ class CoreDataStorage: NSManagedObject {
         return order!
     }
     
+    //MARK:- Method to delete completed order from Core Data
     func deleteOrder(name: String){
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName:"Order")
         fetchRequest.predicate = NSPredicate(format: "customerName = %@", "\(name)")

@@ -13,6 +13,7 @@ struct Coffee {
     var price: Double?
     var coffeList = [Coffee]()
 
+    //MARK: - Adding differnt coffee types
     mutating func addCoffee() -> [Coffee]
     {
         let obj1 = Coffee(name: "Cappuccino", imageURL: "capuccino", price: 2.5)

@@ -26,6 +26,7 @@ class AddOrderViewController: UIViewController {
         coffeViewModel.getData()
     }
     
+    //MARK: - Segemented Control
     @IBAction func didChangeSegment(_ sender: UISegmentedControl){
         let title = sender.titleForSegment(at: sender.selectedSegmentIndex)
         coffeViewModel.selectedSize(selectedSize: title!)
@@ -41,6 +42,7 @@ class AddOrderViewController: UIViewController {
     }
 }
 
+//MARK: - Tableview methods
 extension AddOrderViewController: UITableViewDelegate,UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return coffeViewModel.numberOfCellModel
